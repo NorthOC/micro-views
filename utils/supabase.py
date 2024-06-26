@@ -11,8 +11,8 @@ def url_exists(supabase: Client, value: str, key:str = "url"):
         url = supabase.from_("views_count").select("*").eq(key, value.lower()).limit(1).execute()
         return url
     except Exception as e:
-            print("url adding no1 error")
-            return {"error": e}
+            return {"error": e,
+                    "helper": "url adding no1 error"}
 
 # check if user already viewed the page
 def unique_view_exists(supabase:Client, url_value:str, uuid_value: str, url_key:str = "url", uuid_key:str = "client_uuid"):
