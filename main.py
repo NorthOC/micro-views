@@ -29,12 +29,14 @@ app.add_middleware(
 def create_view(viewer_instance: Viewer, url_instance: Url):
     url_instance.url = url_instance.url.lower()
     url = url_exists(supabase, url_instance.url)
-    if not url:
+    print(url)
+    if not url.data:
         try:
             url = supabase.from_("views_count").insert({"url": url_instance.url}).execute()
             if not url:
                 return {"error": "Url adding failed"}
         except Exception as e:
+            print("url adding no2 error")
             return {"error": e}
     else:
         try:
@@ -42,6 +44,7 @@ def create_view(viewer_instance: Viewer, url_instance: Url):
             _data, _count = supabase.from_("views_count").update({"views": incremented}).eq("url", url_instance.url).execute()
             
         except Exception as e:
+            print("increment error")
             return {"error": e}
 
     if not unique_view_exists(supabase, url_instance.url, viewer_instance.client_uuid):
@@ -53,6 +56,7 @@ def create_view(viewer_instance: Viewer, url_instance: Url):
             if not view:
                 return {"error": "Unique view adding failed"}
         except Exception as e:
+            print("unique view adding error")
             return {"error": e}
     
     return {"message": "success"}
