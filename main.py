@@ -27,7 +27,11 @@ app.add_middleware(
 # add view
 @app.post("/api/create_view", response_model=None)
 def create_view(viewer_instance: Viewer, url_instance: Url):
-    url_instance.url = url_instance.url.lower()
+    url_cleaner = url_instance.url.lower().split("?")
+    if len(url_cleaner) > 1:
+        url_instance.url = url_cleaner[0][:-1]
+    else:
+        url_instance.url = url_instance.url.lower()
     url = url_exists(supabase, url_instance.url)
     
     if not url.data:
