@@ -47,7 +47,6 @@ def create_view(viewer_instance: Viewer, url_instance: Url):
         try:
             view = supabase.from_("views_detailed").insert({"url": url_instance.url,
             "country": viewer_instance.country,
-            "ip": viewer_instance.ip,
             "client_uuid": viewer_instance.client_uuid}).execute()
         except Exception as e:
             return {"error": e,
